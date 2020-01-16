@@ -2,14 +2,13 @@ package dbconnection.controller;
 
 import dbconnection.model.ContactTest;
 import dbconnection.model.TableContact;
-import dbconnection.service.ContactService;
+import dbconnection.model.TableCustomer;
 import dbconnection.service.impl.ContactServiceImpl;
+import dbconnection.service.impl.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller represents bean, which can be called by web.
@@ -21,8 +20,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DbController {
 
     @Autowired
-    @Qualifier("contactServiceImpl")
     ContactServiceImpl contactService;
+
+    @Autowired
+    CustomerServiceImpl customerService;
+
+    @RequestMapping(path = "/person/{id}", method = RequestMethod.GET)
+    public ModelAndView getHello(@PathVariable Long id) {
+        ContactTest contactCrm = contactService.getById(id);
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("person", contactCrm);
+        return modelAndView;
+    }
 
     @GetMapping(path = "/getAllContacts")
     public @ResponseBody Iterable<ContactTest> getAllContacts() {
@@ -63,5 +72,10 @@ public class DbController {
     @GetMapping(path = "/getCrmContactById")
     public @ResponseBody TableContact getCrmContactById(Long id) {
         return contactService.getCrmContactById(id);
+    }
+
+    @GetMapping(path = "/getCustomerByObjid")
+    public @ResponseBody TableCustomer getCrmCustomerByObjid(Long id) {
+        return customerService.getCustomerByObjid(id);
     }
 }

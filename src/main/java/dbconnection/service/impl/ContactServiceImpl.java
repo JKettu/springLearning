@@ -4,11 +4,9 @@ import dbconnection.model.ContactTest;
 import dbconnection.model.TableContact;
 import dbconnection.repository.ContactRepository;
 import dbconnection.repository.TableContactRepository;
-import dbconnection.service.ContactService;
-import dbconnection.service.TableContactService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ import java.util.List;
  * Contains business logic (not in this example, but it should)
  */
 @Service
-public class ContactServiceImpl implements ContactService {
+public class ContactServiceImpl {
 
     @Autowired
     private ContactRepository contactRepository;
@@ -25,7 +23,7 @@ public class ContactServiceImpl implements ContactService {
     @Autowired
     private TableContactRepository tableContactRepository;
 
-    @Override
+    @Transactional
     public ContactTest addContact(ContactTest contact) {
         return contactRepository.save(contact);
     }
@@ -34,17 +32,14 @@ public class ContactServiceImpl implements ContactService {
         return tableContactRepository.save(contact);
     }
 
-    @Override
     public void delete(Long id) {
         contactRepository.deleteById(id);
     }
 
-    @Override
     public void deleteAll() {
         contactRepository.deleteAll();
     }
 
-    @Override
     public ContactTest getById(Long id) {
         return contactRepository.findById(id).orElse(null);
     }
@@ -53,12 +48,10 @@ public class ContactServiceImpl implements ContactService {
         return tableContactRepository.findById(id).orElse(null);
     }
 
-    @Override
     public ContactTest getByFirstName(String firstName) {
         return contactRepository.findByFirstName(firstName);
     }
 
-    @Override
     public List<ContactTest> getAll() {
         return (List<ContactTest>) contactRepository.findAll();
     }
