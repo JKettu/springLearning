@@ -1,4 +1,4 @@
-package dbconnection.service.impl;
+package dbconnection.service;
 
 import dbconnection.model.ContactTest;
 import dbconnection.model.TableContact;
